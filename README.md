@@ -19,13 +19,19 @@ A website that teaches kids (ages 7–13) about online privacy, cybersecurity, a
 
 ## Running it
 
-It's a plain static site with no build step. Serve the folder with any web server; YouTube embeds don't play when the page is opened as a `file://`.
+It's a plain static site with no build step.
+
+**On Windows**, double-click `start.bat`. It starts a small local server and opens http://localhost:5173 in your browser. Keep the black window open while you use the site.
+
+**Anywhere else**, serve the folder with any web server:
 
 ```bash
 python -m http.server 5173
 ```
 
 Then open http://localhost:5173.
+
+> If you open `index.html` directly (a `file://` address), YouTube refuses to play videos inside the page (Error 153), because it needs to know which website is asking. In that case the site opens each video on YouTube in a new tab instead. Hosting the site anywhere, such as GitHub Pages, makes the videos play inside the page.
 
 ## Updating the voice
 

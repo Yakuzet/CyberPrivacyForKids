@@ -363,3 +363,9 @@ body.horror .footer{background:#000;color:#511;border-top:1px solid #200}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
+
+/* Shown when the site is opened as a local file (videos open on YouTube instead) */
+.file-note{background:#fff8d6;border:2px solid #ffe58a;border-radius:14px;padding:10px 14px;font-weight:700;margin:12px 0}
+.video .cap small a{color:var(--violet);font-weight:800}
+.chapter .file-note{background:#120000;border-color:#500;color:#c66;font-family:"VT323",monospace;font-size:20px;font-weight:400}
+.chapter .video .cap small a{color:#c33}

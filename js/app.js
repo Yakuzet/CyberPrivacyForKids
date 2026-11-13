@@ -120,16 +120,27 @@
   function videoHTML(v) {
     return `<div class="video">
       <div class="frame"><div class="poster" data-yt="${esc(v.id)}" style="background-image:url('https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg')" role="button" aria-label="Play video: ${esc(v.title)}" tabindex="0"><div class="playbtn">▶</div></div></div>
-      <div class="cap">${esc(v.title)}<small>${esc(v.channel)}</small></div></div>`;
+      <div class="cap">${esc(v.title)}<small>${esc(v.channel)} · <a href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">Watch on YouTube ↗</a></small></div></div>`;
   }
+  /* YouTube refuses to embed (Error 153) when the page is opened as a local file,
+     because the browser sends no Referer. In that case, open the video on YouTube instead. */
+  const CAN_EMBED = location.protocol === "http:" || location.protocol === "https:";
   function bindVideos(root) {
+    if (!CAN_EMBED && !$(".file-note", root) && $(".poster[data-yt]", root)) {
+      const note = document.createElement("div");
+      note.className = "file-note";
+      note.innerHTML = "📺 Videos open on YouTube in a new tab. To watch them right here, start the site with <b>start.bat</b> (see README).";
+      $(".poster[data-yt]", root).closest(".video-grid, .media")?.before(note);
+    }
     $$(".poster[data-yt]", root).forEach((p) => {
       const go = () => {
         TTS.stop(); Horror.duck && Horror.duck();
+        if (!CAN_EMBED) { window.open(`https://www.youtube.com/watch?v=${p.dataset.yt}`, "_blank", "noopener"); return; }
         const f = document.createElement("iframe");
         f.src = `https://www.youtube-nocookie.com/embed/${p.dataset.yt}?autoplay=1&rel=0&modestbranding=1`;
         f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
         f.allowFullscreen = true; f.title = "YouTube video";
+        f.referrerPolicy = "strict-origin-when-cross-origin"; // YouTube needs the site's origin
         p.replaceWith(f);
       };
       p.addEventListener("click", go);
