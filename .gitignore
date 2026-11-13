@@ -1,0 +1,5 @@
+node_modules/
+audio/.tmp/
+.claude/
+.DS_Store
+Thumbs.db
